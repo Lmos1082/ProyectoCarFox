@@ -2,7 +2,8 @@ create database carfox;
 use carfox;
 
 create table Tipo_de_documento(
-Documento varchar (30) primary key not null
+Documento int (2) primary key not null,
+Desc_doc varchar (30) not null
 );
 
 create table rol(
@@ -31,19 +32,26 @@ Repuestos_nombre varchar (45) not null,
 cantidad decimal (5) not null
 );
 
-create table usuarios(
-id_usuario int (12) not null,
-pk_fk_documento varchar (30) not null,
+create table camb_contra(
+cod_pregunta bigint (20) primary key not null auto_increment,
+pregunta varchar (45) not null
+);
+
+create table usuarios (
+id_usuario varchar (20) not null,
+pk_fk_documento int (2) not null,
 nombre_1 text(25) not null,
 nombre_2 text(25),
 apellido_1 text(25) not null,
 apellido_2 text(25),
+contrasena varchar(50) not null,
+fk_cod_pregunta bigint (20) not null,
 primary key (id_usuario, pk_fk_documento)
 );
 
 create table usuario_rol (
-pk_fk_tdoc_usuario varchar(30) not null,
-usuario_id int (12) not null,
+pk_fk_tdoc_usuario int (2) not null,
+usuario_id varchar (20) not null,
 rol_id int(2) not null,
 primary key (pk_fk_tdoc_usuario, usuario_id, rol_id)
 );
@@ -55,23 +63,23 @@ fk_codigo_propietario_auto int not null
 );
 
 create table check_in (
-id_check_in int primary key not null,
+id_check_in int primary key not null auto_increment,
 Registro_fotografico blob not null,
 Descripcion_entrada varchar (100) not null,
 hora_entrada time not null,
 fecha_entrada date not null, /*apartir de aqui hasta que termine esta tabla son los campo que se van a relacionar*/
-fk_documento varchar (30) not null,
-fk_id_usuario int (12) not null,
+fk_documento int (2) not null,
+fk_id_usuario varchar (20) not null,
 fk_id_placa varchar (6) not null
 );
 
 create table check_up (
-id_check_up int not null,
+id_check_up int not null auto_increment,
 hora_salida time not null,
 fecha_salida date not null,
 descripcion_de_reparacion varchar (110) not null,/*apartir de aqui hasta que termine esta tabla son los campo que se van a relacionar*/
-fk_documento varchar (30) not null,
-fk_id_usuario int (12) not null,
+fk_documento int (2) not null,
+fk_id_usuario varchar (20) not null,
 fk_insumos varchar (45)not null,
 pk_fk_check_in int not null,
 primary key (id_check_up, pk_fk_check_in)
@@ -148,6 +156,9 @@ alter table reporte
 add foreign key (fk_codigo_propietario_auto)
 references propietario_auto (codigo_propietario);
 
+alter table usuarios
+add foreign key (fk_cod_pregunta)
+references camb_contra (cod_pregunta);
 
 
 /* inserciones */
@@ -161,13 +172,13 @@ values ("Cedula de Ciudadania"),
 /* #2 usuarios */
 
 insert into usuarios
-values ("1067219831","Cedula de Ciudadania","Juan ","Jose","Florez","Ruiz");
+values ("1067219831","Cedula de Ciudadania","Juan ","Jose","Florez","Ruiz",123);
 
 insert into usuarios
-values ("1327890191","Cedula de Extranjeria","Fernando ","null","Dias","Alvarez"),
-("1067256745","Cedula de Ciudadania","Luisa","Fernanda","Gomez","null"),
-("1297639521","Cedula de Ciudadania","Duban","Santiago","Mojica","null"),
-("1902378252","Cedula de Extranjeria","Emily","anastasia","Sanchez","Beltran");
+values ("1327890191","Cedula de Extranjeria","Fernando ","null","Dias","Alvarez","345"),
+("1067256745","Cedula de Ciudadania","Luisa","Fernanda","Gomez","null","567"),
+("1297639521","Cedula de Ciudadania","Duban","Santiago","Mojica","null","789"),
+("1902378252","Cedula de Extranjeria","Emily","anastasia","Sanchez","Beltran","101a");
 
 /* #3 rol */
 
